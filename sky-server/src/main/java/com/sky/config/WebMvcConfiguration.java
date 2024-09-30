@@ -27,7 +27,7 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
 
     /**
      * 注册自定义拦截器
-     *
+     * 只有登录是不用验证的，其他的handle都需要进行验证
      * @param registry
      */
     protected void addInterceptors(InterceptorRegistry registry) {

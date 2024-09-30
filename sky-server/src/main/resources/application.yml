@@ -21,6 +21,18 @@ mybatis:
     #开启驼峰命名
     map-underscore-to-camel-case: true
 
+# mybatis-plus的配置
+mybatis-plus:
+  type-aliases-package: com.sky.entity
+  global-config:
+    db-config:
+      logic-delete-field: isDeleted  #全局逻辑删除
+      id-type: auto #主键策略自增长
+      #table-prefix: news_ # 设置表的前缀
+  configuration:
+    auto-mapping-behavior: full
+    map-underscore-to-camel-case: true
+
 logging:
   level:
     com:
