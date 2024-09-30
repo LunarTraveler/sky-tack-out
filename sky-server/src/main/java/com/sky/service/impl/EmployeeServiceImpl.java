@@ -31,6 +31,21 @@ public class EmployeeServiceImpl implements EmployeeService {
     private EmployeeMapper employeeMapper;
 
     /**
+     * 启用或者禁用用户
+     * @param status
+     * @param id
+     */
+    @Override
+    public void startOrStop(Integer status, Long id) {
+        // 这里其实修改是可以共用一种修改方法的
+        Employee employee = Employee.builder()
+                .status(status)
+                .id(id)
+                .build();
+        employeeMapper.update(employee);
+    }
+
+    /**
      * 员工分页
      * @param employeePageQueryDTO
      * @return
