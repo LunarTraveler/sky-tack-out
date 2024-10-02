@@ -7,3 +7,8 @@ sky:
     username: root
     password: liuning19881117
 
+  alioss:
+    access-key-id: LTAI5tKU6g7PK6oyHWp1HaG2
+    access-key-secret: 5p45kC5e2XPRFBXIwVLmuAkDj2IzZx
+    bucket-name: lunartravel
+    endpoint: oss-cn-beijing.aliyuncs.com
