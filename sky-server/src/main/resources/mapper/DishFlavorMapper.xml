@@ -12,4 +12,11 @@
         </foreach>
     </insert>
 
+    <delete id="deleteBatchByDishId">
+        delete from sky_take_out.dish_flavor where dish_id in
+        <foreach collection="ids" item="dishId" separator="," open="(" close=")">
+            #{dishId}
+        </foreach>
+    </delete>
+
 </mapper>

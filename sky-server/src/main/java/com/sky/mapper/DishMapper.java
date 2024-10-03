@@ -1,10 +1,16 @@
 package com.sky.mapper;
 
+import com.github.pagehelper.Page;
 import com.sky.annotation.AutoFill;
+import com.sky.dto.DishPageQueryDTO;
 import com.sky.entity.Dish;
 import com.sky.enumeration.OperationType;
+import com.sky.vo.DishVO;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
 
 @Mapper
 public interface DishMapper {
@@ -14,7 +20,7 @@ public interface DishMapper {
      * @param categoryId
      * @return
      */
-    @Select("select count(1) from dish where category_id = #{categoryId}")
+    @Select("select count(1) from sky_take_out.dish where category_id = #{categoryId}")
     Integer countByCategoryId(Long categoryId);
 
     /**
@@ -24,4 +30,27 @@ public interface DishMapper {
     @AutoFill(OperationType.INSERT)
     void insert(Dish dish);
 
+    /**
+     * 菜品分页展示
+     * @param dishPageQueryDTO
+     * @return
+     */
+    Page<DishVO> page(DishPageQueryDTO dishPageQueryDTO);
+
+    /**
+     * 根据id查询相应的菜品
+     * @param id
+     * @return
+     */
+    @Select("select * from sky_take_out.dish where id = #{id}")
+    Dish selectById(Long id);
+
+    /**
+     * 根据id删除相应的菜品
+     * @param dishId
+     */
+    @Delete("delete from sky_take_out.dish where id = #{dishId}")
+    void delete(Long dishId);
+
+    void deleteBatch(List<Long> ids);
 }

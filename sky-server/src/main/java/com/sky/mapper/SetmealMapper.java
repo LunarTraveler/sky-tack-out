@@ -11,7 +11,7 @@ public interface SetmealMapper {
      * @param categoryId
      * @return
      */
-    @Select("select count(1) from setmeal where category_id = #{categoryId}")
+    @Select("select count(1) from sky_take_out.setmeal where category_id = #{categoryId}")
     Integer countByCategoryId(Long categoryId);
 
 }
