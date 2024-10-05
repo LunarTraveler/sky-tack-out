@@ -5,11 +5,28 @@
 
 <mapper namespace="com.sky.mapper.SetmealDishMapper">
 
+    <insert id="insertBatch" parameterType="list">
+        insert into sky_take_out.setmeal_dish(setmeal_id, dish_id, name, price, copies)
+        values
+        <foreach collection="setmealDishes" item="sd" separator=",">
+            ( #{sd.setmealId}, #{sd.dishId},#{sd.name}, #{sd.price}, #{sd.copies})
+        </foreach>
+    </insert>
+
+    <delete id="deleteBatch">
+        delete from sky_take_out.setmeal_dish
+        where setmeal_id in
+        <foreach collection="setmealIds" item="setmealId" separator="," open="(" close=")">
+            #{setmealId}
+        </foreach>
+    </delete>
+
     <select id="getSetmealDishIdsByDishId" resultType="java.lang.Long">
         select setmeal_id from sky_take_out.setmeal_dish where dish_id in
             <foreach collection="ids" item="dishId" separator="," open="(" close=")">
                 #{dishId}
             </foreach>
     </select>
+
 
 </mapper>

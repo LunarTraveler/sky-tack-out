@@ -21,7 +21,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Slf4j
@@ -121,6 +123,10 @@ public class DishServiceImpl implements DishService {
         return dishVO;
     }
 
+    /**
+     * 更新菜品和对应的口味
+     * @param dishDTO
+     */
     @Override
     public void updateDishWithFlavor(DishDTO dishDTO) {
         Dish dish = new Dish();
@@ -139,6 +145,11 @@ public class DishServiceImpl implements DishService {
         }
     }
 
+    /**
+     * 启用和禁用变换
+     * @param status
+     * @param id
+     */
     @Override
     public void startOrStop(Integer status, Long id) {
         Dish dish = Dish.builder()
@@ -147,5 +158,22 @@ public class DishServiceImpl implements DishService {
             .build();
         
         dishMapper.update(dish);
+    }
+
+    /**
+     * 根据分类id查询菜品集合
+     * 好像只要是查询出来的都要按照时间排序一下，那么都是要写xml文件的
+     * @param categoryId
+     * @return
+     */
+    @Override
+    public List<Dish> list(Long categoryId) {
+        // 注意状态应该是启用的状态
+        // 传递的参数要不然是实体类，要么是map集合
+        Map<String, Object> paramters = new HashMap<>();
+        paramters.put("categoryId", categoryId);
+        paramters.put("status", StatusConstant.ENABLE);
+        List<Dish> dishList = dishMapper.list(paramters);
+        return dishList;
     }
 }

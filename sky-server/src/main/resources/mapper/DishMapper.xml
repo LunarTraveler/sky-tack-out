@@ -48,6 +48,28 @@
         </where>
     </select>
 
+    <select id="list" resultType="com.sky.entity.Dish" parameterType="map">
+        select * from sky_take_out.dish
+        <where>
+            <if test="categoryId != null">
+                category_id  = #{categoryId}
+            </if>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+        </where>
+        order by create_time desc <!-- 确实要按照在这样的排序，要把新品排在前面让顾客看到新品-->
+    </select>
+
+    <select id="getBySetmealId" resultType="com.sky.entity.Dish">
+        select d.*
+        from
+        sky_take_out.dish d
+        left join
+        sky_take_out.setmeal_dish sd
+        on (d.id = sd.dish_id)
+        where sd.setmeal_id = #{id}
+    </select>
 
 
 </mapper>
