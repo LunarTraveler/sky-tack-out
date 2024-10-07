@@ -44,11 +44,10 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
                 .addPathPatterns("/admin/**")
                 .excludePathPatterns("/admin/employee/login");
 
-        // 为了方便测试先不加了
-//        registry.addInterceptor(jwtTokenUserInterceptor)
-//                .addPathPatterns("/user/**")
-//                .excludePathPatterns("/user/user/login")
-//                .excludePathPatterns("/user/shop/status");
+        registry.addInterceptor(jwtTokenUserInterceptor)
+                .addPathPatterns("/user/**")
+                .excludePathPatterns("/user/user/login")
+                .excludePathPatterns("/user/shop/status");
     }
 
     /**
@@ -63,7 +62,7 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
                 .description("苍穹外卖项目接口文档")
                 .build();
         Docket docket = new Docket(DocumentationType.SWAGGER_2)
-                .groupName("admin")
+                .groupName("管理端接口文档")
                 .apiInfo(apiInfo)
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.sky.controller.admin"))
@@ -80,7 +79,7 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
                 .description("苍穹外卖项目接口文档")
                 .build();
         Docket docket = new Docket(DocumentationType.SWAGGER_2)
-                .groupName("user")
+                .groupName("用户端接口文档")
                 .apiInfo(apiInfo)
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.sky.controller.user"))

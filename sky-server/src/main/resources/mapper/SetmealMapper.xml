@@ -62,4 +62,19 @@
         </foreach>
     </delete>
 
+    <select id="list" resultType="setmeal" parameterType="setmeal">
+        select * from sky_take_out.setmeal
+        <where>
+            <if test="name != null">
+                name = #{name}
+            </if>
+            <if test="categoryId != null">
+                and category_id = #{categoryId}
+            </if>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+        </where>
+    </select>
+
 </mapper>
