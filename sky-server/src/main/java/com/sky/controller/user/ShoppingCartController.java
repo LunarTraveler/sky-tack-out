@@ -15,7 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/user/shoppingCart")
 @Slf4j
-@Api(tags = "购物车模块")
+@Api(tags = "C端-购物车模块")
 @RequiredArgsConstructor
 public class ShoppingCartController {
 
