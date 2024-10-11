@@ -80,7 +80,7 @@ public class AddressBookServiceImpl implements AddressBookService {
         addressBookMapper.updateIsDefaultByUserId(addressBookFilter);
 
         // 再把传来的那个id地址设置为默认的地址
-        addressBookFilter.setIsDefault(1);
-        addressBookMapper.update(addressBookFilter);
+        addressBook.setIsDefault(1);
+        addressBookMapper.update(addressBook);
     }
 }

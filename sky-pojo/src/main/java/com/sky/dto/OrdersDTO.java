@@ -31,6 +31,7 @@ public class OrdersDTO implements Serializable {
     private LocalDateTime checkoutTime;
 
     //支付方式 1微信，2支付宝
+    // 后续还可以添加云闪付，visa银行卡对接国外的支付平台
     private Integer payMethod;
 
     //实收金额
