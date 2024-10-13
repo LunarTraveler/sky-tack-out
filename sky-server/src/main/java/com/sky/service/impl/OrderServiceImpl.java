@@ -432,6 +432,8 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void confirm(OrdersConfirmDTO ordersConfirmDTO) {
         // 就是把订单的状态修改为已接单
+        // TODO
+        // 这里可以加上预计送达时间（使用百度地图的api）
         Orders ordersFilter = Orders.builder()
                 .status(Orders.CONFIRMED)
                 .id(ordersConfirmDTO.getId())
@@ -514,6 +516,7 @@ public class OrderServiceImpl implements OrderService {
         Orders ordersFilter = Orders.builder()
                 .id(id)
                 .status(Orders.COMPLETED)
+                .deliveryTime(LocalDateTime.now())
                 .build();
         orderMapper.update(ordersFilter);
 
