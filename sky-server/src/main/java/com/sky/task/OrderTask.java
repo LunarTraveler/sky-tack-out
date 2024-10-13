@@ -28,7 +28,7 @@ public class OrderTask {
 
         List<Orders> ordersList = orderMapper.getByStatusAndOrderTime(Orders.PENDING_PAYMENT, time);
 
-        if (ordersList !=null && !ordersList.isEmpty()) {
+        if (ordersList != null && !ordersList.isEmpty()) {
             for (Orders orders : ordersList) {
                 orders.setStatus(Orders.CANCELLED);
                 orders.setCancelReason("订单超时取消支付");

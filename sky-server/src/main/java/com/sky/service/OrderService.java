@@ -1,5 +1,6 @@
 package com.sky.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.sky.dto.*;
 import com.sky.result.PageResult;
 import com.sky.vo.OrderPaymentVO;
@@ -27,7 +28,7 @@ public interface OrderService {
      * 支付成功，修改订单状态
      * @param outTradeNo
      */
-    void paySuccess(String outTradeNo);
+    void paySuccess(String outTradeNo) throws JsonProcessingException;
 
     /**
      * 查询历史订单
@@ -98,4 +99,10 @@ public interface OrderService {
      * @param ordersCancelDTO
      */
     void cancel(OrdersCancelDTO ordersCancelDTO) throws Exception;
+
+    /**
+     * 催单
+     * @param id
+     */
+    void reminder(Long id) throws JsonProcessingException;
 }

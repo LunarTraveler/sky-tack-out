@@ -3,6 +3,8 @@ package com.sky.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.sky.constant.MessageConstant;
@@ -21,6 +23,7 @@ import com.sky.vo.OrderPaymentVO;
 import com.sky.vo.OrderStatisticsVO;
 import com.sky.vo.OrderSubmitVO;
 import com.sky.vo.OrderVO;
+import com.sky.websocket.WebSocketServer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -51,6 +54,10 @@ public class OrderServiceImpl implements OrderService {
     private final UserMapper userMapper;
 
     private final WeChatPayUtil weChatPayUtil;
+    
+    private final WebSocketServer webSocketServer;
+
+    private final ObjectMapper objectMapper;
 
     /**
      * 用户下单
@@ -213,6 +220,7 @@ public class OrderServiceImpl implements OrderService {
 //                "苍穹外卖订单", //商品描述
 //                user.getOpenid() //微信用户的openid
 //        );
+
         // 生成空的json,暂时跳过微信支付
         JSONObject jsonObject = new JSONObject();
 
@@ -232,7 +240,7 @@ public class OrderServiceImpl implements OrderService {
      *
      * @param outTradeNo
      */
-    public void paySuccess(String outTradeNo) {
+    public void paySuccess(String outTradeNo) throws JsonProcessingException {
 
         // 根据订单号查询订单
         Orders ordersDB = orderMapper.getByNumber(outTradeNo);
@@ -250,6 +258,19 @@ public class OrderServiceImpl implements OrderService {
         // 在清空购物车
         Long userId = BaseContext.getCurrentId();
         shoppingCartMapper.deleteByUserId(userId);
+
+        // 通过websocket向服务器发送消息通知（来单提醒）
+        Map map = new HashMap();
+        map.put("type", 1);
+        map.put("orderId", orders.getId());
+        map.put("content", "订单号 : " + outTradeNo);
+
+        // 这里采用了jackson的转换
+        // ObjectMapper objectMapper = new ObjectMapper();
+        // springboot装配好了这个，直接注入就行了，如果要修改功能也是可以的
+        String json = objectMapper.writeValueAsString(map);
+        webSocketServer.sendToAllClient(json);
+        log.info("json : {}", json);
     }
 
     /**
@@ -556,5 +577,26 @@ public class OrderServiceImpl implements OrderService {
         orderMapper.update(ordersFilter);
     }
 
+    /**
+     * 催单
+     * @param id
+     */
+    @Override
+    public void reminder(Long id) throws JsonProcessingException {
+        Orders order = orderMapper.getById(id);
+
+        if (order == null) {
+            throw new OrderBusinessException(MessageConstant.ORDER_NOT_FOUND);
+        }
+
+        // 封装消息
+        Map map = new HashMap();
+        map.put("type", 2);
+        map.put("orderId", id);
+        map.put("content", "订单号 : " + order.getNumber());
+
+        String json = objectMapper.writeValueAsString(map);
+        webSocketServer.sendToAllClient(json);
+    }
 
 }
