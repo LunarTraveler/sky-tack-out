@@ -673,9 +673,9 @@ public class OrderServiceImpl implements OrderService {
             map.put("begin", beginTime);
             map.put("end", endTime);
 
-            Integer newUserCount = orderMapper.getAmountOfNewUserByDays(map);
+            Integer newUserCount = userMapper.getAmountOfNewUserByDays(map);
             map.remove("begin");
-            Integer totalUserCount = orderMapper.getAmountOfTotalUserByDay(map);
+            Integer totalUserCount = userMapper.getAmountOfTotalUserByDay(map);
 
             newUserList.add(newUserCount);
             totalUserList.add(totalUserCount);
@@ -730,10 +730,12 @@ public class OrderServiceImpl implements OrderService {
         Integer totalOrderCounts = orderMapper.getOrderCount(map);
         // 整个时间段的总有效订单数
         Integer validOrderCounts = orderMapper.getVaildOrderCount(map);
-        // 订单完成率(保留了两位小数)
-        double orderCompletionRate = (validOrderCounts * 1.0 / totalOrderCounts) * 100.0;
-        orderCompletionRate = Math.round(orderCompletionRate) / 100.0;
-
+        // 订单完成率(保留了两位小数)(要小心不能出现/0的异常)
+        double orderCompletionRate = 0.0;
+        if (totalOrderCounts != 0) {
+            orderCompletionRate = (validOrderCounts * 1.0 / totalOrderCounts) * 100.0;
+            orderCompletionRate = Math.round(orderCompletionRate) / 100.0;
+        }
         // 计算每一天的订单总数
         List<Integer> orderCountList = new ArrayList<>();
         // 计算每一天的有效订单总数

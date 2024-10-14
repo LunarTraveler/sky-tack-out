@@ -73,26 +73,10 @@ public interface OrderMapper {
     Double getSumTurnoverByDays(Map map);
 
     /**
-     * 计算每一天的新增用户的列表
+     * 得到一段时间内的总订单数(加上状态来让这个代码更加高复用)
      * @param map
      * @return
      */
-    Integer getAmountOfNewUserByDays(Map map);
-
-    /**
-     * 截至到这个时候的全部用户量
-     * @param map
-     * @return
-     */
-    @Select("select count(1) from sky_take_out.user where create_time < #{end}")
-    Integer getAmountOfTotalUserByDay(Map map);
-
-    /**
-     * 得到一段时间内的总订单数
-     * @param map
-     * @return
-     */
-    @Select("select count(1) from sky_take_out.orders where order_time between #{begin} and #{end}")
     Integer getOrderCount(Map map);
 
     /**

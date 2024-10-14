@@ -88,18 +88,6 @@
         </where>
     </select>
 
-    <select id="getAmountOfNewUserByDays" resultType="java.lang.Integer">
-        select count(1) from sky_take_out.user
-        <where>
-            <if test="begin != null">
-                create_time &gt;= #{begin}
-            </if>
-            <if test="end != null">
-                and create_time &lt; #{end}
-            </if>
-        </where>
-    </select>
-
     <select id="top10" resultType="com.sky.dto.GoodsSalesDTO">
         SELECT
             od.NAME AS name,
@@ -119,6 +107,21 @@
         ORDER BY
             number DESC
         LIMIT 0,10
+    </select>
+
+    <select id="getOrderCount" resultType="java.lang.Integer">
+        select count(1) from sky_take_out.orders
+        <where>
+            <if test="status != null">
+                status = #{status}
+            </if>
+            <if test="begin != null">
+                and order_time &gt;= #{begin}
+            </if>
+            <if test="end != null">
+                and order_time &lt; #{end}
+            </if>
+        </where>
     </select>
 
 
