@@ -1,6 +1,7 @@
 package com.sky.mapper;
 
 import com.github.pagehelper.Page;
+import com.sky.dto.GoodsSalesDTO;
 import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.entity.Orders;
 import org.apache.ibatis.annotations.Mapper;
@@ -8,6 +9,7 @@ import org.apache.ibatis.annotations.Select;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface OrderMapper {
@@ -62,4 +64,50 @@ public interface OrderMapper {
      */
     @Select("select * from sky_take_out.orders where status = #{status} and order_time < #{time}")
     List<Orders> getByStatusAndOrderTime(Integer status, LocalDateTime time);
+
+    /**
+     * 计算一天的营业额总数
+     * @param map
+     * @return
+     */
+    Double getSumTurnoverByDays(Map map);
+
+    /**
+     * 计算每一天的新增用户的列表
+     * @param map
+     * @return
+     */
+    Integer getAmountOfNewUserByDays(Map map);
+
+    /**
+     * 截至到这个时候的全部用户量
+     * @param map
+     * @return
+     */
+    @Select("select count(1) from sky_take_out.user where create_time < #{end}")
+    Integer getAmountOfTotalUserByDay(Map map);
+
+    /**
+     * 得到一段时间内的总订单数
+     * @param map
+     * @return
+     */
+    @Select("select count(1) from sky_take_out.orders where order_time between #{begin} and #{end}")
+    Integer getOrderCount(Map map);
+
+    /**
+     * 得到一段时间内的有效总订单数
+     * @param map
+     * @return
+     */
+    @Select("select count(1) from sky_take_out.orders where delivery_time between #{begin} and #{end}")
+    Integer getVaildOrderCount(Map map);
+
+    /**
+     * 查询销量排名top10(这里既包括菜品，又包括套餐，是一起算的)
+     * @param begin
+     * @param end
+     * @return
+     */
+    List<GoodsSalesDTO> top10(LocalDateTime begin, LocalDateTime end);
 }

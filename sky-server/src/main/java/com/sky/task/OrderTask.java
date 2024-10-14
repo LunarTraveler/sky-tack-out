@@ -19,8 +19,9 @@ public class OrderTask {
 
     /**
      * 处理订单支付超时(没三分钟一次检查)
+     * 这种的压力对于数据库太大，升级的方法是使用消息队列来完成
      */
-    @Scheduled(cron = "* 3 * * * ?")
+    @Scheduled(cron = "* 15 * * * ?")
     public void processPayTimeOut() {
         log.info("处理订单支付超时 {}", LocalDateTime.now());
 
