@@ -6,7 +6,6 @@ import com.sky.context.BaseContext;
 import com.sky.enumeration.OperationType;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
@@ -14,9 +13,7 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 @Aspect
 @Component
@@ -37,7 +34,9 @@ public class AutoFillAspect {
         AutoFill autoFill = signature.getMethod().getAnnotation(AutoFill.class);
         OperationType operationType = autoFill.value();
 
-        // 获取到当前拦截的实体对象
+        // 获取到当前拦截的实体对象参数
+        // 因为这个监控的是插入和更新操作（也就是说如果没有参数的话，那么这个方法的执行也就没有意义，算是做了一个非空的判断）
+        // 而且这个参数只有一个参数实体类
         Object[] objects = joinPoint.getArgs();
         if (objects == null || objects.length == 0) {
             return;
@@ -45,7 +44,7 @@ public class AutoFillAspect {
 
         Object entity = objects[0];
 
-        // 准备赋值的参数
+        // 准备赋值的参数（这个方法使得在service层的操作可以减少了）
         LocalDateTime now = LocalDateTime.now();
         Long currentId = BaseContext.getCurrentId();
 

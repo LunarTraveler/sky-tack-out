@@ -1,7 +1,7 @@
 package com.sky.controller.admin;
 
 import com.sky.result.Result;
-import com.sky.service.OrderService;
+import com.sky.service.ReportService;
 import com.sky.vo.OrderReportVO;
 import com.sky.vo.SalesTop10ReportVO;
 import com.sky.vo.TurnoverReportVO;
@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
 
 @RestController
@@ -24,7 +25,7 @@ import java.time.LocalDate;
 @RequiredArgsConstructor
 public class ReportController {
 
-    private final OrderService orderService;
+    private final ReportService reportService;
 
     /**
      * 营业额统计数据
@@ -37,7 +38,7 @@ public class ReportController {
     public Result<TurnoverReportVO> turnoverStatistic(@DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate begin,
                                                       @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end) {
 
-        TurnoverReportVO turnoverReportVO = orderService.turnoverStatistic(begin, end);
+        TurnoverReportVO turnoverReportVO = reportService.turnoverStatistic(begin, end);
         return Result.success(turnoverReportVO);
     }
 
@@ -51,7 +52,7 @@ public class ReportController {
     @ApiOperation("用户数量统计数据")
     public Result<UserReportVO> userStatistic(@DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate begin,
                                               @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end) {
-        UserReportVO userReportVO = orderService.userStatistic(begin, end);
+        UserReportVO userReportVO = reportService.userStatistic(begin, end);
         return Result.success(userReportVO);
     }
 
@@ -65,7 +66,7 @@ public class ReportController {
     @ApiOperation("订单统计数据")
     public Result<OrderReportVO> orderStatistic(@DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate begin,
                                                 @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end) {
-        OrderReportVO orderReportVO = orderService.orderStatistic(begin, end);
+        OrderReportVO orderReportVO = reportService.orderStatistic(begin, end);
         return Result.success(orderReportVO);
     }
 
@@ -79,8 +80,20 @@ public class ReportController {
     @ApiOperation("查询销量排名top10")
     public Result<SalesTop10ReportVO> top10(@DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate begin,
                                             @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end) {
-        SalesTop10ReportVO salesTop10ReportVO = orderService.top10(begin, end);
+        SalesTop10ReportVO salesTop10ReportVO = reportService.top10(begin, end);
         return Result.success(salesTop10ReportVO);
+    }
+
+    /**
+     * 导出Excel报表接口
+     * @param response
+     * @return
+     */
+    @GetMapping("/export")
+    @ApiOperation("导出Excel报表接口")
+    public Result export(HttpServletResponse response) {
+        reportService.export(response);
+        return Result.success();
     }
 
 }

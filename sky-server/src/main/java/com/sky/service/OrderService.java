@@ -3,9 +3,10 @@ package com.sky.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.sky.dto.*;
 import com.sky.result.PageResult;
-import com.sky.vo.*;
-
-import java.time.LocalDate;
+import com.sky.vo.OrderPaymentVO;
+import com.sky.vo.OrderStatisticsVO;
+import com.sky.vo.OrderSubmitVO;
+import com.sky.vo.OrderVO;
 
 public interface OrderService {
 
@@ -105,35 +106,4 @@ public interface OrderService {
      */
     void reminder(Long id) throws JsonProcessingException;
 
-    /**
-     * 统计每天的营业额
-     * @param begin
-     * @param end
-     * @return
-     */
-    TurnoverReportVO turnoverStatistic(LocalDate begin, LocalDate end);
-
-    /**
-     * 用户数量统计数据
-     * @param begin
-     * @param end
-     * @return
-     */
-    UserReportVO userStatistic(LocalDate begin, LocalDate end);
-
-    /**
-     * 订单统计数据
-     * @param begin
-     * @param end
-     * @return
-     */
-    OrderReportVO orderStatistic(LocalDate begin, LocalDate end);
-
-    /**
-     * 查询销量排名top10
-     * @param begin
-     * @param end
-     * @return
-     */
-    SalesTop10ReportVO top10(LocalDate begin, LocalDate end);
 }
